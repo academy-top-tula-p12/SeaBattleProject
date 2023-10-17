@@ -1,0 +1,36 @@
+#pragma once
+#include <string>
+
+#include "Field.h"
+
+class Player
+{
+protected:
+	std::string name;
+	Field battleField;
+	std::vector<Ship> flotilla;
+public:
+	Player(std::string name);
+	Player();
+
+	std::string& Name();
+	Field& BattleField();
+	std::vector<Ship>& Flotilla();
+	int FlotillaSize();
+
+	HitType CheckShot(Point point);
+	
+	virtual Point SetShot() = 0;
+	virtual void SetFlotilla() = 0;
+};
+
+class HumanPlayer : public Player
+{
+
+};
+
+class ComputerPlayer : public Player
+{
+
+};
+

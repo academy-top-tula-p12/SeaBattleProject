@@ -1,8 +1,8 @@
-//#pragma once
-//#include "Game.h"
-//
-//class IGamePlatform;
-//class IPalyerPlatform;
+#pragma once
+#include "Player.h"
+
+class IGamePlatform;
+class IPalyerPlatform;
 //
 //class Platform
 //{
@@ -18,17 +18,17 @@
 //	IPalyerPlatform* PlayerPlatform() { return playerPlatform; }
 //};
 //
-//class IGamePlatform
-//{
-//public:
-//	virtual void SetupGame(Player* humanPlayer) = 0;
-//	virtual void ViewGame(std::vector<Player*> players) = 0;
-//};
-//
-//class IPalyerPlatform
-//{
-//public:
-//	virtual std::vector<Ship> SetFlotilla() = 0;
-//	virtual Point SetShot() = 0;
-//};
-//
+class IGamePlatform
+{
+public:
+	virtual void SetupGame(Player* humanPlayer) = 0;
+	virtual void ViewGame(std::vector<Player*> players) = 0;
+};
+
+class IPalyerPlatform
+{
+public:
+	virtual std::vector<Ship> SetFlotilla() = 0;
+	virtual Point SetShot() = 0;
+};
+

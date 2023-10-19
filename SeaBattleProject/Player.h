@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Field.h"
-//#include "Platform.h"
+#include "Platform.h"
 
 class Player
 {

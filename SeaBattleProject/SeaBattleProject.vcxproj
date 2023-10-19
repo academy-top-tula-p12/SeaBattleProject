@@ -128,14 +128,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SeaBattleProject.cpp" />
     <ClCompile Include="Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Ship.h" />
   </ItemGroup>

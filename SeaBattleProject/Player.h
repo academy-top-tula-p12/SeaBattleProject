@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-
 #include "Field.h"
+//#include "Platform.h"
 
 class Player
 {
@@ -26,11 +26,34 @@ public:
 
 class HumanPlayer : public Player
 {
+	//IPalyerPlatform* playerPlatform;
+public:
+	//IPalyerPlatform*& PlayerPlatform() { return playerPlatform; }
 
+	Point SetShot() override
+	{
+		return Point();
+		//return playerPlatform->SetShot();
+	}
+
+	void SetFlotilla() override
+	{
+		//flotilla = playerPlatform->SetFlotilla();
+		battleField.SetShips(flotilla);
+	}
 };
 
 class ComputerPlayer : public Player
 {
+public:
+	Point SetShot() override
+	{
+		return Point();
+	}
 
+	void SetFlotilla() override
+	{
+
+	}
 };
 

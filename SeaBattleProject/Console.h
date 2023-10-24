@@ -47,7 +47,61 @@ enum Border : int
 	Vertical
 };
 
+enum BorderStyle
+{
+	Single,
+	Double
+};
 
+class Console;
+
+class WindowConsole
+{
+	Console* console;
+
+	int row, column;
+	int width, height;
+
+	bool isBorder;
+	BorderStyle borderStyle;
+	Colors borderBack, 
+		borderFore, 
+		areaBack, 
+		areaFore;
+
+	std::string title;
+
+	bool isShow;
+
+	CHAR_INFO* bufferSave;
+	CHAR_INFO* bufferShow;
+public:
+	WindowConsole(Console* console);
+	WindowConsole(Console* console, int row, int column, int height, int width);
+	
+	int& Row();
+	int& Column();
+	int& Width();
+	int& Height();
+
+	bool& IsBorder();
+	BorderStyle& BorderStyle();
+
+	Colors& BorderBack();
+	Colors& BorderFore();
+	Colors& AreaBack();
+	Colors& AreaFore();
+
+	std::string& Title();
+
+	void SetColors(Colors borderBack, Colors borderFore, Colors	areaBack, Colors areaFore);
+
+	void WriteGoto(int row, int column, std::string message);
+	void WriteGoto(int row, int column, char message);
+
+	void Show();
+	void Hide();
+};
 
 class Console
 {
@@ -61,6 +115,7 @@ public:
 
 	void Clear();
 	int GetChar();
+	int KeyPressed();
 
 	void CursorGoto(int row, int column);
 	void Write(std::string message);

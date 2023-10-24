@@ -1,23 +1,24 @@
 #pragma once
 #include "Player.h"
 
+class Player;
 class IGamePlatform;
 class IPalyerPlatform;
-//
-//class Platform
-//{
-//	IGamePlatform* gamePlatform;
-//	IPalyerPlatform* playerPlatform;
-//public:
-//	Platform(IGamePlatform* gamePlatform,
-//		IPalyerPlatform* playerPlatform)
-//		: gamePlatform{ gamePlatform },
-//		playerPlatform{ playerPlatform } {}
-//
-//	IGamePlatform* GamePlatform() { return gamePlatform; }
-//	IPalyerPlatform* PlayerPlatform() { return playerPlatform; }
-//};
-//
+
+class Platform
+{
+	IGamePlatform* gamePlatform;
+	IPalyerPlatform* playerPlatform;
+public:
+	Platform(IGamePlatform* gamePlatform,
+		IPalyerPlatform* playerPlatform)
+		: gamePlatform{ gamePlatform },
+		playerPlatform{ playerPlatform } {}
+
+	IGamePlatform* GamePlatform() { return gamePlatform; }
+	IPalyerPlatform* PlayerPlatform() { return playerPlatform; }
+};
+
 class IGamePlatform
 {
 public:

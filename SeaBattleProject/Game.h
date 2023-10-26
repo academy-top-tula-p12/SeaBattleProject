@@ -7,9 +7,9 @@ class Game
 	std::vector<Player*> players;
 	bool currentPlayer{ false };
 
-	//Platform* platform;
+	Platform* platform;
 public:
-	//Game(Platform* platform = nullptr);
+	Game(Platform* platform = nullptr);
 	Game();
 	
 	void Setup();

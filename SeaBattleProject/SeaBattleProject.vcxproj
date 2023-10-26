@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="PlayerPlatformConsole.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -139,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="PlayerPlatformConsole.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Platform.h" />

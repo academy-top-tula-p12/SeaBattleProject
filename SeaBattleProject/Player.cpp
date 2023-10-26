@@ -49,3 +49,27 @@ HitType Player::CheckShot(Point point)
 		}
 	}
 }
+
+
+
+Point HumanPlayer::SetShot()
+{
+	return playerPlatform->SetShot();
+}
+
+void HumanPlayer::SetFlotilla()
+{
+	flotilla = playerPlatform->SetFlotilla();
+	battleField.SetShips(flotilla);
+}
+
+
+Point ComputerPlayer::SetShot()
+{
+	return Point();
+}
+
+void ComputerPlayer::SetFlotilla()
+{
+
+}

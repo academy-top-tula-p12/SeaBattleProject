@@ -1,12 +1,8 @@
 #pragma once
 #include <iostream>
 #include <conio.h>
+#include <iomanip>
 #include <Windows.h>
-
-const char WATER = 176;
-const char DESK = 219 ;
-
-
 
 enum class KeyCode
 {
@@ -57,10 +53,12 @@ class Console;
 
 class WindowConsole
 {
+protected:
 	Console* console;
 
 	int row, column;
-	int width, height;
+	int width;
+	int height;
 
 	bool isBorder;
 	BorderStyle borderStyle;
@@ -83,6 +81,7 @@ public:
 	int& Column();
 	int& Width();
 	int& Height();
+	void SetSize(int height, int width);
 
 	bool& IsBorder();
 	BorderStyle& BorderStyle();
@@ -97,9 +96,11 @@ public:
 	void SetColors(Colors borderBack, Colors borderFore, Colors	areaBack, Colors areaFore);
 
 	void WriteGoto(int row, int column, std::string message);
+	void WriteWidthGoto(int row, int column, int width, std::string message);
 	void WriteGoto(int row, int column, char message);
+	
 
-	void Show();
+	virtual void Show();
 	void Hide();
 };
 
@@ -122,6 +123,8 @@ public:
 	void Write(char symbol);
 	void WriteGoto(int row, int column, std::string message);
 	void WriteGoto(int row, int column, char symbol);
+
+	void WriteWidthGoto(int row, int column, int width, std::string message);
 
 	void Foreground(Colors color, bool brightness = false);
 	void Background(Colors color, bool brightness = false);

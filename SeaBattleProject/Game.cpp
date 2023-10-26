@@ -1,20 +1,21 @@
 #include "Game.h"
 
-//Game::Game(Platform* platform)
-//	:platform{ platform }
-//{
-//	HumanPlayer* humanPlayer = new HumanPlayer();
-//	humanPlayer->PlayerPlatform() = platform->PlayerPlatform();
-//	players.push_back(humanPlayer);
-//
-//	ComputerPlayer* computerPlayer = new ComputerPlayer();
-//	players.push_back(computerPlayer);
-//}
+Game::Game(Platform* platform)
+	:platform{ platform }
+{
+	HumanPlayer* humanPlayer = new HumanPlayer();
+	humanPlayer->PlayerPlatform() = platform->PlayerPlatform();
+	players.push_back(humanPlayer);
+
+	ComputerPlayer* computerPlayer = new ComputerPlayer();
+	players.push_back(computerPlayer);
+}
+
 
 Game::Game()
 {
 	HumanPlayer* humanPlayer = new HumanPlayer();
-	//humanPlayer->PlayerPlatform() = platform->PlayerPlatform();
+	humanPlayer->PlayerPlatform() = platform->PlayerPlatform();
 	players.push_back(humanPlayer);
 	
 	ComputerPlayer* computerPlayer = new ComputerPlayer();

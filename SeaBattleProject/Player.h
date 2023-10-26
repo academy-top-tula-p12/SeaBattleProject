@@ -3,6 +3,8 @@
 #include "Field.h"
 #include "Platform.h"
 
+class IPlayerPlatform;
+
 class Player
 {
 protected:
@@ -26,34 +28,18 @@ public:
 
 class HumanPlayer : public Player
 {
-	//IPalyerPlatform* playerPlatform;
+	IPlayerPlatform* playerPlatform;
 public:
-	//IPalyerPlatform*& PlayerPlatform() { return playerPlatform; }
+	IPlayerPlatform*& PlayerPlatform() { return playerPlatform; }
 
-	Point SetShot() override
-	{
-		return Point();
-		//return playerPlatform->SetShot();
-	}
-
-	void SetFlotilla() override
-	{
-		//flotilla = playerPlatform->SetFlotilla();
-		battleField.SetShips(flotilla);
-	}
+	Point SetShot() override;
+	void SetFlotilla() override;
 };
 
 class ComputerPlayer : public Player
 {
 public:
-	Point SetShot() override
-	{
-		return Point();
-	}
-
-	void SetFlotilla() override
-	{
-
-	}
+	Point SetShot() override;
+	void SetFlotilla() override;
 };
 

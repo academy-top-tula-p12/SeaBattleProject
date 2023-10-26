@@ -3,20 +3,20 @@
 
 class Player;
 class IGamePlatform;
-class IPalyerPlatform;
+class IPlayerPlatform;
 
 class Platform
 {
 	IGamePlatform* gamePlatform;
-	IPalyerPlatform* playerPlatform;
+	IPlayerPlatform* playerPlatform;
 public:
 	Platform(IGamePlatform* gamePlatform,
-		IPalyerPlatform* playerPlatform)
+		IPlayerPlatform* playerPlatform)
 		: gamePlatform{ gamePlatform },
 		playerPlatform{ playerPlatform } {}
 
 	IGamePlatform* GamePlatform() { return gamePlatform; }
-	IPalyerPlatform* PlayerPlatform() { return playerPlatform; }
+	IPlayerPlatform* PlayerPlatform() { return playerPlatform; }
 };
 
 class IGamePlatform
@@ -26,10 +26,13 @@ public:
 	virtual void ViewGame(std::vector<Player*> players) = 0;
 };
 
-class IPalyerPlatform
+class IPlayerPlatform
 {
 public:
 	virtual std::vector<Ship> SetFlotilla() = 0;
 	virtual Point SetShot() = 0;
 };
+
+
+
 

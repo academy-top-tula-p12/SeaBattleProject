@@ -57,6 +57,12 @@ void Console::WriteGoto(int row, int column, char symbol)
 	Write(symbol);
 }
 
+void Console::WriteWidthGoto(int row, int column, int width, std::string message)
+{
+	CursorGoto(row, column);
+	std::cout << std::setw(width) << message;
+}
+
 void Console::Foreground(Colors color, bool brightness)
 {
 	GetConsoleScreenBufferInfo(descriptor, &info);
@@ -163,6 +169,18 @@ int& WindowConsole::Height()
 	return height;
 }
 
+void WindowConsole::SetSize(int height, int width)
+{
+	this->height = height;
+	this->width = width;
+
+	delete[] bufferSave;
+	delete[] bufferShow;
+
+	bufferSave = new CHAR_INFO[height * width];
+	bufferShow = new CHAR_INFO[height * width];
+}
+
 bool& WindowConsole::IsBorder()
 {
 	return isBorder;
@@ -208,10 +226,23 @@ void WindowConsole::SetColors(Colors borderBack, Colors borderFore, Colors areaB
 
 void WindowConsole::WriteGoto(int row, int column, std::string message)
 {
+	console->Background(areaBack, true);
+	console->Foreground(areaFore);
+	console->WriteGoto(Row() + row, Column() + column, message);
+}
+
+void WindowConsole::WriteWidthGoto(int row, int column, int width, std::string message)
+{
+	console->Background(areaBack, true);
+	console->Foreground(areaFore);
+	console->WriteWidthGoto(Row() + row, Column() + column, width, message);
 }
 
 void WindowConsole::WriteGoto(int row, int column, char message)
 {
+	console->Background(areaBack, true);
+	console->Foreground(areaFore);
+	console->WriteGoto(Row() + row, Column() + column, message);
 }
 
 void WindowConsole::Show()

@@ -20,7 +20,10 @@ void Console::Clear()
 
 int Console::GetChar()
 {
-	return _getch();
+	int key = _getch();
+	if (key == 0 || key == 0xE0)
+		key = _getch();
+	return key;
 }
 
 int Console::KeyPressed()
@@ -58,6 +61,12 @@ void Console::WriteGoto(int row, int column, char symbol)
 }
 
 void Console::WriteWidthGoto(int row, int column, int width, std::string message)
+{
+	CursorGoto(row, column);
+	std::cout << std::setw(width) << message;
+}
+
+void Console::WriteWidthGoto(int row, int column, int width, char message)
 {
 	CursorGoto(row, column);
 	std::cout << std::setw(width) << message;
@@ -238,6 +247,13 @@ void WindowConsole::WriteWidthGoto(int row, int column, int width, std::string m
 	console->WriteWidthGoto(Row() + row, Column() + column, width, message);
 }
 
+void WindowConsole::WriteWidthGoto(int row, int column, int width, char message)
+{
+	console->Background(areaBack, true);
+	console->Foreground(areaFore);
+	console->WriteWidthGoto(Row() + row, Column() + column, width, message);
+}
+
 void WindowConsole::WriteGoto(int row, int column, char message)
 {
 	console->Background(areaBack, true);
@@ -279,6 +295,7 @@ void WindowConsole::Show()
 	bufferShow[0].Char.UnicodeChar = border[Border::TopLeft];
 	bufferShow[0].Attributes = attributeBorder;
 
+	
 	for (index = 1; index < width - 1; index++)
 	{
 		bufferShow[index].Char.UnicodeChar = border[Border::Horisontal];

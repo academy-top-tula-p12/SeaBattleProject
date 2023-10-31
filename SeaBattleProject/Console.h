@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <Windows.h>
 
-enum class KeyCode
+enum KeyCode : int
 {
 	ArrowUp = 72,
 	ArrowDown = 80,
@@ -96,12 +96,13 @@ public:
 	void SetColors(Colors borderBack, Colors borderFore, Colors	areaBack, Colors areaFore);
 
 	void WriteGoto(int row, int column, std::string message);
-	void WriteWidthGoto(int row, int column, int width, std::string message);
 	void WriteGoto(int row, int column, char message);
+	void WriteWidthGoto(int row, int column, int width, std::string message);
+	void WriteWidthGoto(int row, int column, int width, char message);
 	
 
 	virtual void Show();
-	void Hide();
+	virtual void Hide();
 };
 
 class Console
@@ -125,6 +126,7 @@ public:
 	void WriteGoto(int row, int column, char symbol);
 
 	void WriteWidthGoto(int row, int column, int width, std::string message);
+	void WriteWidthGoto(int row, int column, int width, char message);
 
 	void Foreground(Colors color, bool brightness = false);
 	void Background(Colors color, bool brightness = false);

@@ -3,7 +3,7 @@
 int WATER = 0x2592;
 int DESK = 0x2588;
 
-FieldConsole::FieldConsole(Console* console, int row, int column, int size)
+FieldConsole::FieldConsole(Console* console, int row, int column)
     : WindowConsole(console)
 {
     sizeCell = 2;
@@ -16,8 +16,8 @@ FieldConsole::FieldConsole(Console* console, int row, int column, int size)
 
     this->Row() = row;
     this->Column() = column;
-    this->SetSize(size * sizeCell + areaBegin.row + 3,
-        size * sizeCell * 2 + areaBegin.column * 2 + 2);
+    this->SetSize(sizeField * sizeCell + areaBegin.row + 3,
+        sizeField * sizeCell * 2 + areaBegin.column * 2 + 2);
 }
 
 void FieldConsole::Show()
@@ -80,8 +80,8 @@ ShipConsole::ShipConsole(Console* console,
     direction{ direction }
 {
     isBorder = false;
-    areaBack = Colors::Green;
-    areaFore = Colors::Green;
+    areaBack = Colors::Blue;
+    areaFore = Colors::Blue;
     width = size;
     height = 1;
 
@@ -99,6 +99,12 @@ DirectionShip& ShipConsole::Direction()
 {
     return direction;
 }
+
+int ShipConsole::Size()
+{
+    return size;
+}
+
 void ShipConsole::Show()
 {
     if (isShow) return;
@@ -134,7 +140,7 @@ void ShipConsole::Show()
                         bufferPosition,
                         &rect);
 
-    WORD attributeArea = ((WORD)areaFore + (true ? 8 : 0)) | (((WORD)areaBack + (true ? 8 : 0)) << 4);
+    WORD attributeArea = ((WORD)areaFore + (false ? 8 : 0)) | (((WORD)areaBack + (false ? 8 : 0)) << 4);
 
     for (int i = 0; i < size * sizeCell * 2 * sizeCell; i++)
     {

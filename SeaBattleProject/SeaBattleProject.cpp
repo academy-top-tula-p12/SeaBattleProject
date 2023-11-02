@@ -2,7 +2,7 @@
 #include "Console.h"
 #include "PlayerPlatformConsole.h"
 
-int main()
+void tempFunction()
 {
     //setlocale(LC_ALL, "Russian");
 
@@ -13,15 +13,15 @@ int main()
     game.Process();*/
 
     Console* console = new Console();
-    
+
     //WindowConsole win(console, 3, 5, 10, 10);
-    FieldConsole field(console, 2, 5, 10);
+    FieldConsole field(console, 2, 5);
     //win.Show();
     field.Show();
 
-    ShipConsole ship(console, Point(0, 0), 3, DirectionShip::Vertical);
-    ship.Show();   
-    
+    ShipConsole ship(console, Point(2, 2), 3, DirectionShip::Vertical);
+    ship.Show();
+
     KeyCode key = KeyCode::Enter;
     bool isQuit = false;
 
@@ -61,12 +61,20 @@ int main()
             default:
                 break;
             }
-            
+
             if (isQuit) break;
             ship.Show();
         }
-        
     }
 
     //console->GetChar();
+}
+
+
+int main()
+{
+    Console* console = new Console();
+
+    PlayerPlatformConsole playerPlatform(console);
+    playerPlatform.SetFlotilla();
 }

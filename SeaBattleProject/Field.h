@@ -21,7 +21,7 @@ public:
 	Cell GetCell(int row, int column);
 	Cell GetCell(Point point);
 
-	void SetShips(std::vector<Ship> flotilla);
+	void SetShips(std::vector<Ship*> flotilla);
 	HitType CheckShot(Point point);
 };
 

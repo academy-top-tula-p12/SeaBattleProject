@@ -15,7 +15,7 @@ Field& Player::BattleField()
 	return battleField;
 }
 
-std::vector<Ship>& Player::Flotilla()
+std::vector<Ship*>& Player::Flotilla()
 {
 	return flotilla;
 }
@@ -23,8 +23,8 @@ std::vector<Ship>& Player::Flotilla()
 int Player::FlotillaSize()
 {
 	int size{};
-	for (Ship ship : flotilla)
-		if (!ship.IsDead())
+	for (Ship* ship : flotilla)
+		if (!ship->IsDead())
 			size++;
 	return size;
 }
@@ -39,10 +39,10 @@ HitType Player::CheckShot(Point point)
 
 	for (int i = 0; i < flotilla.size(); i++)
 	{
-		if (flotilla[i].IsPoint(point))
+		if (flotilla[i]->IsPoint(point))
 		{
-			flotilla[i].Damage()++;
-			if (flotilla[i].IsDead())
+			flotilla[i]->Damage()++;
+			if (flotilla[i]->IsDead())
 				return HitType::Destroy;
 			else
 				return HitType::Wound;

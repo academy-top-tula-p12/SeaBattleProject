@@ -3,35 +3,43 @@
 int WATER = 0x2592;
 int DESK = 0x2588;
 
-FieldConsole::FieldConsole(Console* console, int row, int column)
+FieldConsole::FieldConsole(Console* console)
     : WindowConsole(console)
 {
-    sizeCell = 2;
-    sizeField = 10;
-    areaBegin.row = 1;
-    areaBegin.column = 2;
+    //areaBegin.row = 1;
+    //areaBegin.column = 2;
 
-    //areaBack = Colors::Yellow;
+    ////areaBack = Colors::Yellow;
 
 
-    this->Row() = row;
-    this->Column() = column;
-    this->SetSize(sizeField * sizeCell + areaBegin.row + 3,
-        sizeField * sizeCell * 2 + areaBegin.column * 2 + 2);
+    //this->Row() = row;
+    //this->Column() = column;
+    //this->SetSize(sizeField * sizeCell + areaBegin.row + 3,
+    //    sizeField * sizeCell * 2 + areaBegin.column * 2 + 2);
+}
+
+int& FieldConsole::SizeCell()
+{
+    return sizeCell;
+}
+
+FieldConsoleBuilder FieldConsole::GetBuilder(Console* console)
+{
+    return FieldConsoleBuilder(new FieldConsole(console));
 }
 
 void FieldConsole::Show()
 {
     WindowConsole::Show();
 
-    Point offsetArea(areaBegin.row, areaBegin.column);
+    Point offsetArea(AreaBegin.row, AreaBegin.column);
     Point offsetField(offsetArea.row + 1, offsetArea.column + 1);
 
-    int hField = sizeField * sizeCell;
-    int wField = sizeField * sizeCell * 2;
+    int hField = SizeField * sizeCell;
+    int wField = SizeField * sizeCell * 2;
 
     // show coordinates
-    for (int i = 0; i < sizeField; i++)
+    for (int i = 0; i < SizeField; i++)
     {
         WriteWidthGoto(offsetArea.row,
             offsetArea.column + sizeCell + i * sizeCell * 2 - (sizeCell - 1),
@@ -70,39 +78,100 @@ void FieldConsole::Show()
 
 }
 
-ShipConsole::ShipConsole(Console* console, 
-                         Point point, 
-                         int size, 
-                         DirectionShip direction)
-    : WindowConsole(console),
-    point{ point },
-    size{ size },
-    direction{ direction }
+
+
+FieldConsoleBuilder::FieldConsoleBuilder(FieldConsole* field)
+    : field{ field } {}
+
+FieldConsoleBuilder* FieldConsoleBuilder::SetPoint(Point point)
 {
+    field->Row() = point.row;
+    field->Column() = point.column;
+
+    return this;
+}
+
+FieldConsoleBuilder* FieldConsoleBuilder::SetCellSize(int size)
+{
+    field->SizeCell() = size;
+
+    field->SetSize(field->SizeField * field->SizeCell() + field->AreaBegin.row + 3,
+        field->SizeField * size * 2 + field->AreaBegin.column * 2 + 2);
+    return this;
+}
+
+FieldConsoleBuilder* FieldConsoleBuilder::SetColorBack(Colors color)
+{
+    field->AreaBack() = color;
+    field->BorderBack() = color;
+    return this;
+}
+
+FieldConsole* FieldConsoleBuilder::GetField()
+{
+    return field;
+}
+
+ShipConsole::ShipConsole(Console* console, int size)
+    : WindowConsole(console)
+{
+    ship = new Ship(Point(0, 0), size, DirectionShip::Horizontal);
+
+    sizeCell = 1;
+    areaBegin = { 1, 1 };
+    
     isBorder = false;
     areaBack = Colors::Blue;
     areaFore = Colors::Blue;
+
+    column = ship->Column() + areaBegin.column;
+    row = ship->Row() + areaBegin.row;
+
     width = size;
     height = 1;
 
-    sizeCell = 2;
-
-    areaBegin.row = 1;
-    areaBegin.column = 1;
-
-    column = point.column;
-    row = point.row;
     bufferSave = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
     bufferShow = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
 }
+
+ShipConsole* ShipConsole::SetSizeCell(int size)
+{
+    sizeCell = size;
+
+    delete[] bufferSave;
+    delete[] bufferShow;
+
+    bufferSave = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
+    bufferShow = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
+
+    return this;
+}
+
+ShipConsole* ShipConsole::SetAreaBegin(Point point)
+{
+    areaBegin = point;
+    areaBegin.row += 2;
+    areaBegin.column += 3;
+
+    column = ship->Column() + areaBegin.column;
+    row = ship->Row() + areaBegin.row;
+
+    return this;
+}
+
 DirectionShip& ShipConsole::Direction()
 {
-    return direction;
+    return ship->Direction();
+}
+
+Ship*& ShipConsole::InnerShip()
+{
+    return ship;
 }
 
 int ShipConsole::Size()
 {
-    return size;
+    return ship->Size();
 }
 
 void ShipConsole::Show()
@@ -113,25 +182,30 @@ void ShipConsole::Show()
     COORD bufferPosition{ 0, 0 };
     SMALL_RECT rect;
 
-    if (direction == DirectionShip::Horizontal)
+    if (ship->Direction() == DirectionShip::Horizontal)
     {
         bufferSize.X = width * sizeCell * 2;
         bufferSize.Y = height * sizeCell;
 
-        rect.Top = row * sizeCell;
+        rect.Top = areaBegin.row + InnerShip()->Row() * sizeCell;
+        rect.Left = areaBegin.column + InnerShip()->Column() * 2 * sizeCell;
+        rect.Bottom = (areaBegin.row + InnerShip()->Row() + height) * sizeCell;
+        rect.Right = (areaBegin.column + InnerShip()->Column() + width) * sizeCell * 2;
+
+        /*rect.Top = row * sizeCell;
         rect.Left = column * sizeCell * 2;
         rect.Bottom = (row * sizeCell + height) * sizeCell;
-        rect.Right = (column + width) * sizeCell * 2;
+        rect.Right = (column + width) * sizeCell * 2;*/
     }
     else
     {
         bufferSize.X = height * sizeCell * 2;
         bufferSize.Y = width * sizeCell;
 
-        rect.Top = row * sizeCell;
-        rect.Left = column * sizeCell * 2;
-        rect.Bottom = (row * sizeCell + width) * sizeCell;
-        rect.Right = (column + height) * sizeCell * 2;
+        rect.Top = areaBegin.row + InnerShip()->Row() * sizeCell;
+        rect.Left = areaBegin.column + InnerShip()->Column() * 2 * sizeCell;
+        rect.Bottom = (areaBegin.row + InnerShip()->Row() + width) * sizeCell;
+        rect.Right = (areaBegin.column + InnerShip()->Column() + height) * sizeCell * 2;
     }
 
     bool dSuccess = ReadConsoleOutput(console->Descriptor(),
@@ -142,7 +216,7 @@ void ShipConsole::Show()
 
     WORD attributeArea = ((WORD)areaFore + (false ? 8 : 0)) | (((WORD)areaBack + (false ? 8 : 0)) << 4);
 
-    for (int i = 0; i < size * sizeCell * 2 * sizeCell; i++)
+    for (int i = 0; i < ship->Size() * sizeCell * 2 * sizeCell; i++)
     {
         bufferShow[i].Char.UnicodeChar = DESK;
         bufferShow[i].Attributes = attributeArea;
@@ -164,25 +238,25 @@ void ShipConsole::Hide()
     COORD bufferPosition{ 0, 0 };
     SMALL_RECT rect;
 
-    if (direction == DirectionShip::Horizontal)
+    if (ship->Direction() == DirectionShip::Horizontal)
     {
         bufferSize.X = width * sizeCell * 2;
         bufferSize.Y = height * sizeCell;
 
-        rect.Top = row * sizeCell;
-        rect.Left = column * sizeCell * 2;
-        rect.Bottom = (row * sizeCell + height) * sizeCell;
-        rect.Right = (column + width) * sizeCell * 2;
+        rect.Top = areaBegin.row + InnerShip()->Row() * sizeCell;
+        rect.Left = areaBegin.column + InnerShip()->Column() * 2 * sizeCell;
+        rect.Bottom = (areaBegin.row + InnerShip()->Row() + height) * sizeCell;
+        rect.Right = (areaBegin.column + InnerShip()->Column() + width) * sizeCell * 2;
     }
     else
     {
         bufferSize.X = height * sizeCell * 2;
         bufferSize.Y = width * sizeCell;
 
-        rect.Top = row * sizeCell;
-        rect.Left = column * sizeCell * 2;
-        rect.Bottom = (row * sizeCell + width) * sizeCell;
-        rect.Right = (column + height) * sizeCell * 2;
+        rect.Top = areaBegin.row + InnerShip()->Row() * sizeCell;
+        rect.Left = areaBegin.column + InnerShip()->Column() * 2 * sizeCell;
+        rect.Bottom = (areaBegin.row + InnerShip()->Row() + width) * sizeCell;
+        rect.Right = (areaBegin.column + InnerShip()->Column() + height) * sizeCell * 2;
     }
 
     bool dSuccess = WriteConsoleOutput(console->Descriptor(),

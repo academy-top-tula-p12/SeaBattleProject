@@ -10,13 +10,12 @@
 class PlayerPlatformConsole : public IPlayerPlatform
 {
 	Console* console;
-	std::vector<Ship> flotilla;
-
+	std::vector<Ship*> flotilla;
 
 	std::vector<ShipConsole> ships;
 	std::array<int, 4> counts{ 4, 3, 2, 1 };
-	int rowMain{ 2 };
-	int columnMain{ 5 };
+	int rowMain{ 3 };
+	int columnMain{ 20 };
 
 	int SelectShip();
 	ShipConsole* SetShip(int size);
@@ -24,7 +23,7 @@ class PlayerPlatformConsole : public IPlayerPlatform
 public:
 	PlayerPlatformConsole(Console* console) : console{ console } {}
 
-	std::vector<Ship> SetFlotilla() override;
+	std::vector<Ship*> SetFlotilla() override;
 	Point SetShot() override { return Point(); };
 };
 

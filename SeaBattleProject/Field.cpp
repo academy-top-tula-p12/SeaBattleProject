@@ -31,16 +31,16 @@ Cell Field::GetCell(Point point)
 	return cells[point.row][point.column];
 }
 
-void Field::SetShips(std::vector<Ship> flotilla)
+void Field::SetShips(std::vector<Ship*> flotilla)
 {
-	for (Ship ship : flotilla)
+	for (Ship* ship : flotilla)
 	{
-		int row = ship.Row();
-		int column = ship.Column();
-		for (int s = 0; s < ship.Size(); s++)
+		int row = ship->Row();
+		int column = ship->Column();
+		for (int s = 0; s < ship->Size(); s++)
 		{
 			SetCellType(Point(row, column), CellType::Deck);
-			(ship.Direction() == DirectionShip::Horizontal) ? column++ : row++;
+			(ship->Direction() == DirectionShip::Horizontal) ? column++ : row++;
 		}
 	}
 }

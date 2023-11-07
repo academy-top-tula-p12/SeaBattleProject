@@ -98,14 +98,15 @@ int PlayerPlatformConsole::SelectShip()
 
 ShipConsole* PlayerPlatformConsole::SetShip(int size)
 {
-    ShipConsole* ship = new ShipConsole(console, 
-                                        Point(2, 2), 
-                                        size + 1, 
-                                        DirectionShip::Horizontal);
-    ship->Show();
+    ShipConsole* shipConsole = (new ShipConsole(console, size))
+        ->SetSizeCell(3)
+        ->SetAreaBegin(Point(rowMain, columnMain));
+
+    shipConsole->Show();
+
     KeyCode key = KeyCode::Enter;
     bool isQuit = false;
-    int r{}, c{};
+    //int r{}, c{};
 
 
     while (true)
@@ -114,79 +115,79 @@ ShipConsole* PlayerPlatformConsole::SetShip(int size)
         {
             key = (KeyCode)console->GetChar();
 
-            ship->Hide();
+            shipConsole->Hide();
 
             switch (key)
             {
             case ArrowUp:
-                if (r > 0)
+                if (shipConsole->InnerShip()->Row() > 0)
                 {
-                    ship->Row()--;
-                    r--;
+                    shipConsole->Row()--;
+                    shipConsole->InnerShip()->Row()--;
                 }
                 break;
             case ArrowDown:
-                if (ship->Direction() == DirectionShip::Horizontal)
+                if (shipConsole->Direction() == DirectionShip::Horizontal)
                 {
-                    if (r < 9)
+                    if (shipConsole->InnerShip()->Row() < 9)
                     {
-                        ship->Row()++;
-                        r++;
+                        shipConsole->Row()++;
+                        shipConsole->InnerShip()->Row()++;
                     }
                 }
                 else
                 {
-                    if (r + ship->Size() < 10)
+                    if (shipConsole->InnerShip()->Row() + shipConsole->Size() < 10)
                     {
-                        ship->Row()++;
-                        r++;
+                        shipConsole->Row()++;
+                        shipConsole->InnerShip()->Row()++;
                     }
                 }
                 break;
             case ArrowLeft:
-                if (c > 0)
+                if (shipConsole->InnerShip()->Column() > 0)
                 {
-                    ship->Column()--;
-                    c--;
+                    shipConsole->Column()--;
+                    shipConsole->InnerShip()->Column()--;
                 }
                     
                 break;
             case ArrowRight:
-                if (ship->Direction() == DirectionShip::Vertical)
+                if (shipConsole->Direction() == DirectionShip::Vertical)
                 {
-                    if (c < 9)
+                    if (shipConsole->InnerShip()->Column() < 9)
                     {
-                        ship->Column()++;
-                        c++;
+                        shipConsole->Column()++;
+                        shipConsole->InnerShip()->Column()++;
                     }
                 }
                 else
                 {
-                    if (c + ship->Size() < 10)
+                    if (shipConsole->InnerShip()->Column() + shipConsole->Size() < 10)
                     {
-                        ship->Column()++;
-                        c++;
+                        shipConsole->Column()++;
+                        shipConsole->InnerShip()->Column()++;
                     }
                 }
                 break;
             case Enter:
-                isQuit = IsSetShip(ship);
+                isQuit = IsSetShip(shipConsole);
                 break;
             case Space:
-                if (ship->Direction() == DirectionShip::Horizontal)
+                if (shipConsole->Direction() == DirectionShip::Horizontal)
                 {
-                    if(r + ship->Size() < 11)
-                        ship->Direction() = DirectionShip::Vertical;
+                    if(shipConsole->InnerShip()->Row() + shipConsole->Size() < 11)
+                        shipConsole->Direction() = DirectionShip::Vertical;
                 }
                 else
                 {
-                    if(c + ship->Size() < 11)
-                        ship->Direction() = DirectionShip::Horizontal;
+                    if(shipConsole->InnerShip()->Column() + shipConsole->Size() < 11)
+                        shipConsole->Direction() = DirectionShip::Horizontal;
                 }
                     
                 break;
             case Esc:
-                ship = nullptr;
+                shipConsole = nullptr;
                 isQuit = true;
                 break;
             default:
@@ -194,10 +195,10 @@ ShipConsole* PlayerPlatformConsole::SetShip(int size)
             }
 
             if (isQuit) break;
-            ship->Show();
+            shipConsole->Show();
         }
     }
-    return ship;
+    return shipConsole;
 }
 
 bool PlayerPlatformConsole::IsSetShip(ShipConsole* ship)
@@ -210,22 +211,26 @@ bool PlayerPlatformConsole::IsSetShip(ShipConsole* ship)
     return true;
 }
 
-std::vector<Ship> PlayerPlatformConsole::SetFlotilla()
+std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 {
     
     int currentShip{};
 
-    FieldConsole field(console, rowMain, columnMain);
+    auto builder = FieldConsole::GetBuilder(console);
+    auto field = builder.SetPoint(Point(rowMain, columnMain))
+        ->SetCellSize(3)
+        ->GetField();
 
-    field.Show();
+    field->Show();
     currentShip = SelectShip();
 
-    ShipConsole* ship = SetShip(currentShip);
-    
+   
+    ShipConsole* ship = SetShip(currentShip + 1);
+    /*
 
     
 
-    console->GetChar();
+    console->GetChar();*/
 
     //while (true)
     //{
@@ -237,5 +242,5 @@ std::vector<Ship> PlayerPlatformConsole::SetFlotilla()
     //}
     
 
-    return std::vector<Ship>();
+    return std::vector<Ship*>();
 }

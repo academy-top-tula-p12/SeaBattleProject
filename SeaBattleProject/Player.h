@@ -10,14 +10,14 @@ class Player
 protected:
 	std::string name;
 	Field battleField;
-	std::vector<Ship> flotilla;
+	std::vector<Ship*> flotilla;
 public:
 	Player(std::string name);
 	Player();
 
 	std::string& Name();
 	Field& BattleField();
-	std::vector<Ship>& Flotilla();
+	std::vector<Ship*>& Flotilla();
 	int FlotillaSize();
 
 	HitType CheckShot(Point point);

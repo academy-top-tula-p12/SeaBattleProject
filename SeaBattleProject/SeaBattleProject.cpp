@@ -4,70 +4,71 @@
 
 void tempFunction()
 {
-    //setlocale(LC_ALL, "Russian");
 
-    /*Game game;
-    game.Setup();
-    game.View();
+    ////setlocale(LC_ALL, "Russian");
 
-    game.Process();*/
+    ///*Game game;
+    //game.Setup();
+    //game.View();
 
-    Console* console = new Console();
+    //game.Process();*/
 
-    //WindowConsole win(console, 3, 5, 10, 10);
-    FieldConsole field(console, 2, 5);
-    //win.Show();
-    field.Show();
+    //Console* console = new Console();
 
-    ShipConsole ship(console, Point(2, 2), 3, DirectionShip::Vertical);
-    ship.Show();
+    ////WindowConsole win(console, 3, 5, 10, 10);
+    //FieldConsole field(console, 2, 5);
+    ////win.Show();
+    //field.Show();
 
-    KeyCode key = KeyCode::Enter;
-    bool isQuit = false;
+    //ShipConsole ship(console, Point(2, 2), 3, DirectionShip::Vertical);
+    //ship.Show();
 
-    while (true)
-    {
-        if (console->KeyPressed())
-        {
-            key = (KeyCode)console->GetChar();
+    //KeyCode key = KeyCode::Enter;
+    //bool isQuit = false;
 
-            ship.Hide();
+    //while (true)
+    //{
+    //    if (console->KeyPressed())
+    //    {
+    //        key = (KeyCode)console->GetChar();
 
-            switch (key)
-            {
-            case ArrowUp:
-                ship.Row()--;
-                break;
-            case ArrowDown:
-                ship.Row()++;
-                break;
-            case ArrowLeft:
-                ship.Column()--;
-                break;
-            case ArrowRight:
-                ship.Column()++;
-                break;
-            case Enter:
-                break;
-            case Space:
-                if (ship.Direction() == DirectionShip::Horizontal)
-                    ship.Direction() = DirectionShip::Vertical;
-                else
-                    ship.Direction() = DirectionShip::Horizontal;
-                break;
-            case Esc:
-                isQuit = true;
-                break;
-            default:
-                break;
-            }
+    //        ship.Hide();
 
-            if (isQuit) break;
-            ship.Show();
-        }
-    }
+    //        switch (key)
+    //        {
+    //        case ArrowUp:
+    //            ship.Row()--;
+    //            break;
+    //        case ArrowDown:
+    //            ship.Row()++;
+    //            break;
+    //        case ArrowLeft:
+    //            ship.Column()--;
+    //            break;
+    //        case ArrowRight:
+    //            ship.Column()++;
+    //            break;
+    //        case Enter:
+    //            break;
+    //        case Space:
+    //            if (ship.Direction() == DirectionShip::Horizontal)
+    //                ship.Direction() = DirectionShip::Vertical;
+    //            else
+    //                ship.Direction() = DirectionShip::Horizontal;
+    //            break;
+    //        case Esc:
+    //            isQuit = true;
+    //            break;
+    //        default:
+    //            break;
+    //        }
 
-    //console->GetChar();
+    //        if (isQuit) break;
+    //        ship.Show();
+    //    }
+    //}
+
+    ////console->GetChar();
 }
 
 

@@ -12,14 +12,16 @@ class PlayerPlatformConsole : public IPlayerPlatform
 	Console* console;
 	std::vector<Ship*> flotilla;
 
-	std::vector<ShipConsole> ships;
+	std::vector<ShipConsole*> shipsConsole;
 	std::array<int, 4> counts{ 4, 3, 2, 1 };
-	int rowMain{ 3 };
-	int columnMain{ 20 };
+	int rowMain{ 2 };
+	int columnMain{ 5 };
+	int sizeCell{ 2 };
 
 	int SelectShip();
 	ShipConsole* SetShip(int size);
 	bool IsSetShip(ShipConsole* ship);
+	void ShowShips();
 public:
 	PlayerPlatformConsole(Console* console) : console{ console } {}
 

@@ -3,8 +3,8 @@
 
 int PlayerPlatformConsole::SelectShip()
 {
-    int columnShips{ columnMain + 10 * 2 * 2 + 20 };
-    int hShip{ 2 };
+    int columnShips{ columnMain + 10 * 2 * sizeCell + 20 };
+    int hShip{ sizeCell };
     int wShip{ 4 };
 
     int currentShip{ 2 };
@@ -23,7 +23,7 @@ int PlayerPlatformConsole::SelectShip()
             
         else
             console->Background(Colors::Magenta);
-        console->Rectangle(rowMain + size * hShip * 2, columnShips, 2, (size + 1) * 2 * 2);
+        console->Rectangle(rowMain + size * hShip * 2, columnShips, sizeCell, (size + 1) * 2 * sizeCell);
     }
 
 
@@ -88,7 +88,7 @@ int PlayerPlatformConsole::SelectShip()
 
                 else
                     console->Background(Colors::Magenta);
-                console->Rectangle(rowMain + size * hShip * 2, columnShips, 2, (size + 1) * 2 * 2);
+                console->Rectangle(rowMain + size * hShip * 2, columnShips, sizeCell, (size + 1) * 2 * sizeCell);
             }
         }
         if (isQuit) break;
@@ -99,7 +99,7 @@ int PlayerPlatformConsole::SelectShip()
 ShipConsole* PlayerPlatformConsole::SetShip(int size)
 {
     ShipConsole* shipConsole = (new ShipConsole(console, size))
-        ->SetSizeCell(3)
+        ->SetSizeCell(sizeCell)
         ->SetAreaBegin(Point(rowMain, columnMain));
 
     shipConsole->Show();
@@ -202,14 +202,57 @@ ShipConsole* PlayerPlatformConsole::SetShip(int size)
 }
 
 bool PlayerPlatformConsole::IsSetShip(ShipConsole* ship)
-{
-    for (int dr = -1; dr < ship->Size() + 1; dr++)
-    {
+{   
+    bool isWrong = false;
 
+    for (auto shipConsole : shipsConsole)
+    {
+        int r = ship->InnerShip()->Row();
+        int c = ship->InnerShip()->Column();
+
+        for (int i = 0; i < ship->Size(); i++)
+        {
+            for (int rx = -1; rx < 2; rx++)
+            {
+                for (int cx = -1; cx < 2; cx++)
+                {
+                    isWrong = shipConsole->InnerShip()->IsPoint(Point(r + rx, c + cx));
+                    if (isWrong) break;
+                }
+                if (isWrong) break;
+            }
+            if (isWrong) break;
+            
+            (ship->Direction() == DirectionShip::Horizontal) ? c++ : r++;
+        }
     }
 
-    return true;
+    return !isWrong;
 }
+
+void PlayerPlatformConsole::ShowShips()
+{
+    for (auto shipConsole : shipsConsole)
+    {
+        int rBegin = rowMain + shipConsole->InnerShip()->Row() * sizeCell;
+        int cBegin = columnMain + shipConsole->InnerShip()->Column() * 2 * sizeCell;
+        int rEnd{}, cEnd{};
+        if (shipConsole->Direction() == DirectionShip::Horizontal)
+        {
+            rEnd = rBegin + sizeCell;
+            cEnd = cBegin + shipConsole->Size() * 2 * sizeCell;
+        }
+        else
+        {
+            rEnd = rBegin + shipConsole->Size() * sizeCell;
+            cEnd = cBegin + 2 * sizeCell;
+        }
+
+        console->Background(Colors::Green);
+        console->Rectangle(rBegin, cBegin, rEnd, cEnd);
+    }
+}
+
 
 std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 {
@@ -218,14 +261,31 @@ std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 
     auto builder = FieldConsole::GetBuilder(console);
     auto field = builder.SetPoint(Point(rowMain, columnMain))
-        ->SetCellSize(3)
+        ->SetCellSize(sizeCell)
         ->GetField();
 
     field->Show();
+
+    
+
+    //
+    currentShip = SelectShip();
+   
+    ShowShips();
+    ShipConsole* ship = SetShip(currentShip + 1);
+
+    shipsConsole.push_back(ship);
+    //
+    //
     currentShip = SelectShip();
 
-   
-    ShipConsole* ship = SetShip(currentShip + 1);
+    ShowShips();
+    ship = SetShip(currentShip + 1);
+    
+
+    shipsConsole.push_back(ship);
+    //
+
     /*
 
     

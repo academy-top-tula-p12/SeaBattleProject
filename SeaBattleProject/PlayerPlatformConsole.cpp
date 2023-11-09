@@ -111,6 +111,7 @@ ShipConsole* PlayerPlatformConsole::SetShip(int size)
 
     while (true)
     {
+        isQuit = false;
         if (console->KeyPressed())
         {
             key = (KeyCode)console->GetChar();
@@ -234,22 +235,22 @@ void PlayerPlatformConsole::ShowShips()
 {
     for (auto shipConsole : shipsConsole)
     {
-        int rBegin = rowMain + shipConsole->InnerShip()->Row() * sizeCell;
-        int cBegin = columnMain + shipConsole->InnerShip()->Column() * 2 * sizeCell;
-        int rEnd{}, cEnd{};
+        int rBegin = rowMain + 2 + shipConsole->InnerShip()->Row() * sizeCell;
+        int cBegin = columnMain + 3 + shipConsole->InnerShip()->Column() * 2 * sizeCell;
+        int width{}, height{};
         if (shipConsole->Direction() == DirectionShip::Horizontal)
         {
-            rEnd = rBegin + sizeCell;
-            cEnd = cBegin + shipConsole->Size() * 2 * sizeCell;
+            height = sizeCell;
+            width = shipConsole->Size() * 2 * sizeCell;
         }
         else
         {
-            rEnd = rBegin + shipConsole->Size() * sizeCell;
-            cEnd = cBegin + 2 * sizeCell;
+            height = shipConsole->Size() * sizeCell;
+            width = 2 * sizeCell;
         }
 
         console->Background(Colors::Green);
-        console->Rectangle(rBegin, cBegin, rEnd, cEnd);
+        console->Rectangle(rBegin, cBegin, height, width);
     }
 }
 
@@ -266,25 +267,23 @@ std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 
     field->Show();
 
-    
+    ShipConsole* ship;
 
-    //
-    currentShip = SelectShip();
-   
-    ShowShips();
-    ShipConsole* ship = SetShip(currentShip + 1);
+    while (true)
+    {
+        currentShip = SelectShip();
 
-    shipsConsole.push_back(ship);
-    //
-    //
-    currentShip = SelectShip();
+        ship = SetShip(currentShip + 1);
+        shipsConsole.push_back(ship);
+        counts[currentShip]--;
+        ShowShips();
 
-    ShowShips();
-    ship = SetShip(currentShip + 1);
-    
+        bool isZero = true;
+        for (int i = 0; i < counts.size(); i++)
+            isZero = isZero && (counts[i] == 0);
 
-    shipsConsole.push_back(ship);
-    //
+        if (isZero) break;
+    }
 
     /*
 

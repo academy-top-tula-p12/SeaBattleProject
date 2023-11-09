@@ -1,8 +1,11 @@
 #include "Game.h"
+#include <ctime>
 
 Game::Game(Platform* platform)
 	:platform{ platform }
 {
+	srand(std::time(nullptr));
+
 	HumanPlayer* humanPlayer = new HumanPlayer();
 	humanPlayer->PlayerPlatform() = platform->PlayerPlatform();
 	players.push_back(humanPlayer);
@@ -24,6 +27,7 @@ Game::Game()
 
 void Game::Setup()
 {
+	platform->GamePlatform()->SetupGame(players[0]);
 
 	for (int i = 0; i < players.size(); i++)
 		players[i]->SetFlotilla();
@@ -31,6 +35,7 @@ void Game::Setup()
 
 void Game::View()
 {
+	platform->GamePlatform()->ViewGame(players);
 }
 
 void Game::Process()

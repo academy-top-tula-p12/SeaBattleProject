@@ -1,6 +1,7 @@
 ﻿#include "Game.h"
 #include "Console.h"
 #include "PlayerPlatformConsole.h"
+#include "GamePlatformConsole.h"
 
 void tempFunction()
 {
@@ -76,6 +77,21 @@ int main()
 {
     Console* console = new Console();
 
-    PlayerPlatformConsole playerPlatform(console);
-    playerPlatform.SetFlotilla();
+    //PlayerPlatformConsole playerPlatform(console);
+    //playerPlatform.SetFlotilla();
+
+    //GamePlatformConsole gamePlatform(console);
+    //gamePlatform.SetupGame(new HumanPlayer());
+
+    Game* game = new Game(
+        new Platform(
+            new GamePlatformConsole(console),
+            new PlayerPlatformConsole(console)
+        )
+    );
+
+    game->Setup();
+    game->View();
+
+    console->GetChar();
 }

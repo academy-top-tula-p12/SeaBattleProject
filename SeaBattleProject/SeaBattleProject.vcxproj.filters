@@ -42,7 +42,7 @@
     <ClCompile Include="LibConsole.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="GameKitConsole.cpp">
+    <ClCompile Include="GamePlatformConsole.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +74,7 @@
     <ClInclude Include="LibConsole.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="GameKitConsole.h">
+    <ClInclude Include="GamePlatformConsole.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

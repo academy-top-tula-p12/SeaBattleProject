@@ -13,6 +13,8 @@ class FieldConsole : public WindowConsole
 	int sizeCell;
 
 public:
+	friend FieldConsoleBuilder;
+
 	const int SizeField{ 10 };
 	const Point AreaBegin{ 1, 2 };
 
@@ -27,8 +29,11 @@ public:
 class FieldConsoleBuilder
 {
 	FieldConsole* field;
+	Console* console;
 public:
 	FieldConsoleBuilder(FieldConsole* field);
+
+	void Reset();
 
 	FieldConsoleBuilder* SetPoint(Point point);
 	FieldConsoleBuilder* SetCellSize(int size);

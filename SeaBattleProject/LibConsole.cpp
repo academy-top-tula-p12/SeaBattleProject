@@ -81,7 +81,15 @@ void FieldConsole::Show()
 
 
 FieldConsoleBuilder::FieldConsoleBuilder(FieldConsole* field)
-    : field{ field } {}
+    : field{ field } 
+{
+    console = field->console;
+}
+
+void FieldConsoleBuilder::Reset()
+{
+    field = new FieldConsole(console);
+}
 
 FieldConsoleBuilder* FieldConsoleBuilder::SetPoint(Point point)
 {

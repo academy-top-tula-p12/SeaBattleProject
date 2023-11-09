@@ -7,7 +7,25 @@ int PlayerPlatformConsole::SelectShip()
     int hShip{ sizeCell };
     int wShip{ 4 };
 
-    int currentShip{ 2 };
+    bool isNotOk;
+    int i;
+
+    int currentShip{ 0 };
+
+    if (!counts[currentShip])
+    {
+        isNotOk = true;
+        for (i = currentShip + 1; i <= 3; i++)
+            if (counts[i])
+            {
+                isNotOk = false;
+                break;
+            }
+        if (!isNotOk)
+            currentShip = i;
+    }
+    
+
 
     for (int size = 0; size < 4; size++)
     {
@@ -30,15 +48,13 @@ int PlayerPlatformConsole::SelectShip()
 
     KeyCode key = KeyCode::Enter;
     bool isQuit = false;
-    int i;
-
 
     while (true)
     {
         if (console->KeyPressed())
         {
             key = (KeyCode)console->GetChar();
-            bool isNotOk;
+            
             switch (key)
             {
             case ArrowUp:
@@ -206,7 +222,7 @@ bool PlayerPlatformConsole::IsSetShip(ShipConsole* ship)
 {   
     bool isWrong = false;
 
-    for (auto shipConsole : shipsConsole)
+    for (auto s : shipsConsole)
     {
         int r = ship->InnerShip()->Row();
         int c = ship->InnerShip()->Column();
@@ -217,7 +233,7 @@ bool PlayerPlatformConsole::IsSetShip(ShipConsole* ship)
             {
                 for (int cx = -1; cx < 2; cx++)
                 {
-                    isWrong = shipConsole->InnerShip()->IsPoint(Point(r + rx, c + cx));
+                    isWrong = s->InnerShip()->IsPoint(Point(r + rx, c + cx));
                     if (isWrong) break;
                 }
                 if (isWrong) break;
@@ -226,6 +242,7 @@ bool PlayerPlatformConsole::IsSetShip(ShipConsole* ship)
             
             (ship->Direction() == DirectionShip::Horizontal) ? c++ : r++;
         }
+        if (isWrong) break;
     }
 
     return !isWrong;
@@ -253,7 +270,6 @@ void PlayerPlatformConsole::ShowShips()
         console->Rectangle(rBegin, cBegin, height, width);
     }
 }
-
 
 std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 {
@@ -285,21 +301,8 @@ std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
         if (isZero) break;
     }
 
-    /*
-
+    for (auto shipConsole : shipsConsole)
+        flotilla.push_back(shipConsole->InnerShip());
     
-
-    console->GetChar();*/
-
-    //while (true)
-    //{
-    //    // ViewField();
-    //    // Ship ship = SetShip();
-    //    // flotilla.push_back(ship);
-    //    if (flotilla.size() == 10)
-    //        break;
-    //}
-    
-
-    return std::vector<Ship*>();
+    return flotilla;
 }

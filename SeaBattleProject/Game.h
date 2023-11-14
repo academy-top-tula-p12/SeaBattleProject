@@ -5,11 +5,13 @@
 
 class Game
 {
-	std::vector<Player*> players;
+	
 	bool currentPlayer{ false };
 
 	Platform* platform;
 public:
+	std::vector<Player*> players;
+
 	Game(Platform* platform = nullptr);
 	Game();
 	

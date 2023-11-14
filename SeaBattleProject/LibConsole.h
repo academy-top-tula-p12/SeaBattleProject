@@ -78,6 +78,11 @@ class ShipConsole : public WindowConsole
 	Point areaBegin;
 public:
 	ShipConsole(Console* console, int size);
+	~ShipConsole()
+	{
+		if (ship)
+			delete ship;
+	}
 
 	ShipConsole* SetSizeCell(int size);
 	ShipConsole* SetAreaBegin(Point point);

@@ -22,8 +22,12 @@ public:
 class IGamePlatform
 {
 public:
-	virtual void SetupGame(Player* humanPlayer) = 0;
-	virtual void ViewGame(std::vector<Player*> players) = 0;
+	virtual void SetupGame() = 0;
+	virtual void ViewGame() = 0;
+	virtual void ViewShot(Point point, bool currentPlayer) = 0;
+
+	virtual std::vector<Player*>& Players() = 0;
+	//virtual void SetDestroy() = 0
 };
 
 class IPlayerPlatform

@@ -322,9 +322,65 @@ std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
     return flotilla;
 }
 
-
-
 Point PlayerPlatformConsole::SetShot()
 {
-        
+    Point point{};
+
+    CursorConsole* cursor = (new CursorConsole(console))
+        ->SetSizeCell(sizeCell)
+        ->SetAreaBegin(Point(rowMain, columnMain + (14 * 2 * sizeCell)));
+
+    cursor->Show();
+
+    KeyCode key = KeyCode::Enter;
+    bool isQuit = false;
+
+    while (true)
+    {
+        isQuit = false;
+        if (console->KeyPressed())
+        {
+            key = (KeyCode)console->GetChar();
+
+            cursor->Hide();
+
+            switch (key)
+            {
+            case ArrowUp:
+                if (cursor->Row() > 0)
+                    cursor->Row()--;
+                break;
+            case ArrowDown:
+                if (cursor->Row() < 9)
+                    cursor->Row()++;
+                break;
+            case ArrowLeft:
+                if (cursor->Column() > 0)
+                    cursor->Column()--;
+                break;
+            case ArrowRight:
+                if (cursor->Column() < 9)
+                    cursor->Column()++;
+                break;
+            case Enter:
+            case Space:
+                isQuit = true;
+                point.row = cursor->Row();
+                point.column = cursor->Column();
+                break;
+            case Esc:
+                isQuit = true;
+                point.row = -1;
+                point.column = -1;
+                break;
+            default:
+                break;
+            }
+
+            if (isQuit) break;
+            cursor->Show();
+        }
+    }
+
+    return point;
 }

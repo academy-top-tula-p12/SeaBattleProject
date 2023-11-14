@@ -282,11 +282,11 @@ CursorConsole::CursorConsole(Console* console)
     areaBegin = { 1, 1 };
 
     isBorder = false;
-    areaBack = Colors::Blue;
-    areaFore = Colors::Blue;
+    areaBack = Colors::Yellow;
+    areaFore = Colors::Yellow;
 
-    column = areaBegin.column;
-    row = areaBegin.row;
+    column = 0;
+    row = 0;
 
     width = 1;
     height = 1;
@@ -313,9 +313,6 @@ CursorConsole* CursorConsole::SetAreaBegin(Point point)
     areaBegin = point;
     areaBegin.row += 2;
     areaBegin.column += 3;
-
-    column = areaBegin.column;
-    row = areaBegin.row;
 
     return this;
 }

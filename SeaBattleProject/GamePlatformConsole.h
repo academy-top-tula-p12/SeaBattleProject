@@ -17,11 +17,19 @@ class GamePlatformConsole : public IGamePlatform
 
 	std::vector<ShipConsole*> humanFlotilla;
 
-	void SetFlotillaConsole(Player* humanPlayer);
+	std::vector<Player*> players;
+
+	FieldConsole* fieldHuman;
+	FieldConsole* fieldComputer;
+
+	void SetFlotillaConsole();
 public:
 	GamePlatformConsole(Console* console);
 
-	void SetupGame(Player* humanPlayer) override;
-	void ViewGame(std::vector<Player*> players) override;
+	std::vector<Player*>& Players() override;
+
+	void SetupGame() override;
+	void ViewGame() override;
+	void ViewShot(Point point, bool currentPlayer) override;
 };
 

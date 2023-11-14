@@ -12,6 +12,8 @@ Game::Game(Platform* platform)
 
 	ComputerPlayer* computerPlayer = new ComputerPlayer();
 	players.push_back(computerPlayer);
+
+	platform->GamePlatform()->Players() = players;
 }
 
 
@@ -27,7 +29,7 @@ Game::Game()
 
 void Game::Setup()
 {
-	platform->GamePlatform()->SetupGame(players[0]);
+	platform->GamePlatform()->SetupGame();
 
 	for (int i = 0; i < players.size(); i++)
 		players[i]->SetFlotilla();
@@ -35,7 +37,7 @@ void Game::Setup()
 
 void Game::View()
 {
-	platform->GamePlatform()->ViewGame(players);
+	platform->GamePlatform()->ViewGame();
 }
 
 void Game::Process()
@@ -43,15 +45,26 @@ void Game::Process()
 	currentPlayer = false;
 	HitType hit;
 
+	View();
+
 	while (true)
 	{
-		View();
 		Point point = players[currentPlayer]->SetShot();
+
+		if (point.row == -1)
+			break;
+
+		platform->GamePlatform()->ViewShot(point, currentPlayer);
+
 		hit = players[!currentPlayer]->CheckShot(point);
 
 		if (hit == HitType::Destroy)
+		{
 			if (players[!currentPlayer]->FlotillaSize() == 0)
 				break;
+			// 
+		}
+			
 
 		if (hit == HitType::Beside)
 			currentPlayer = !currentPlayer;

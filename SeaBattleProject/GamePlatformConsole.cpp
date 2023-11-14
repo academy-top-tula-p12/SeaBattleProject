@@ -1,8 +1,8 @@
 #include "GamePlatformConsole.h"
 
-void GamePlatformConsole::SetFlotillaConsole(Player* humanPlayer)
+void GamePlatformConsole::SetFlotillaConsole()
 {
-	for (auto ship : humanPlayer->Flotilla())
+	for (auto ship : players[0]->Flotilla())
 	{
 		ShipConsole* shipConsole = new ShipConsole(console, ship->Size());
 		shipConsole->InnerShip() = ship;
@@ -18,9 +18,29 @@ void GamePlatformConsole::SetFlotillaConsole(Player* humanPlayer)
 }
 
 GamePlatformConsole::GamePlatformConsole(Console* console)
-	: console{ console } {}
+	: console{ console }
+{
+	auto builder = FieldConsole::GetBuilder(console);
+	fieldHuman = builder.SetPoint(Point(rowMain, columnMain))
+		->SetCellSize(sizeCell)
+		->GetField();
 
-void GamePlatformConsole::SetupGame(Player* humanPlayer)
+	builder.Reset();
+	int computerFieldColumn = columnMain + (fieldHuman->SizeField + 4) * sizeCell * 2;
+	fieldComputer = builder.SetPoint(Point(rowMain, computerFieldColumn))
+		->SetCellSize(sizeCell)
+		->GetField();
+
+	
+	
+}
+
+std::vector<Player*>& GamePlatformConsole::Players()
+{
+	return players;
+}
+
+void GamePlatformConsole::SetupGame()
 {
 	WindowConsole dialog(console, rowMain, columnMain, 7, 20 * sizeCell);
 	dialog.Title() = "Player name";
@@ -33,38 +53,30 @@ void GamePlatformConsole::SetupGame(Player* humanPlayer)
 	std::string name;
 	std::getline(std::cin, name);
 
-	humanPlayer->Name() = name;
+	players[0]->Name() = name;
+
+	fieldHuman->Title() = players[0]->Name();
+	fieldComputer->Title() = players[1]->Name();
 
 	dialog.Hide();
 }
 
-void GamePlatformConsole::ViewGame(std::vector<Player*> players)
+void GamePlatformConsole::ViewGame()
 {
-	if (!humanFlotilla.size())
-		SetFlotillaConsole(players[0]);
+	SetFlotillaConsole();
 
 	console->Clear();
-
-	auto builder = FieldConsole::GetBuilder(console);
-	auto fieldHuman = builder.SetPoint(Point(rowMain, columnMain))
-		->SetCellSize(sizeCell)
-		->GetField();
-	fieldHuman->Title() = players[0]->Name();
 	fieldHuman->Show();
 
 	for (auto shipConsole : humanFlotilla)
 		shipConsole->Show();
 
-	builder.Reset();
-	int computerFieldColumn = columnMain + (fieldHuman->SizeField + 4) * sizeCell * 2;
-	auto fieldComputer = builder.SetPoint(Point(rowMain, computerFieldColumn))
-		->SetCellSize(sizeCell)
-		->GetField();
-	fieldComputer->Title() = players[1]->Name();
 	fieldComputer->Show();
+}
 
-	/*auto fieldComputer = new FieldConsole(console);
-	fieldComputer->Title() = players[1]->Name();
+void GamePlatformConsole::ViewShot(Point point, bool currentPlayer)
+{
+	FieldConsole* field = (currentPlayer) ? fieldComputer : fieldHuman;
 
-	fieldHuman*/
+	//char fill = ()
 }

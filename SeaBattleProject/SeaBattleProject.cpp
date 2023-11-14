@@ -91,7 +91,12 @@ int main()
     );
 
     game->Setup();
-    game->View();
+    //game->View();
+    /*Point point = game->players[0]->SetShot();
+    std::cout << "row: " << point.row
+        << "column: " << point.column << "\n";*/
+
+    game->Process();
 
     console->GetChar();
 }

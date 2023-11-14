@@ -91,3 +91,17 @@ public:
 	void Show() override;
 	void Hide() override;
 };
+
+
+class CursorConsole : public WindowConsole
+{
+	int sizeCell;
+	Point areaBegin;
+public:
+	CursorConsole(Console* console);
+	CursorConsole* SetSizeCell(int size);
+	CursorConsole* SetAreaBegin(Point point);
+
+	void Show() override;
+	void Hide() override;
+};

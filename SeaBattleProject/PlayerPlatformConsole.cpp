@@ -273,7 +273,7 @@ void PlayerPlatformConsole::ShowShips()
 
 std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 {
-    
+    /*
     int currentShip{};
 
     auto builder = FieldConsole::GetBuilder(console);
@@ -303,6 +303,28 @@ std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 
     for (auto shipConsole : shipsConsole)
         flotilla.push_back(shipConsole->InnerShip());
-    
+    */
+
+    flotilla.push_back(new Ship(Point(1, 3), 4, DirectionShip::Horizontal));
+
+    flotilla.push_back(new Ship(Point(3, 0), 3, DirectionShip::Vertical));
+    flotilla.push_back(new Ship(Point(9, 1), 3, DirectionShip::Horizontal));
+
+    flotilla.push_back(new Ship(Point(4, 2), 2, DirectionShip::Horizontal));
+    flotilla.push_back(new Ship(Point(4, 8), 2, DirectionShip::Horizontal));
+    flotilla.push_back(new Ship(Point(7, 5), 2, DirectionShip::Vertical));
+
+    flotilla.push_back(new Ship(Point(0, 1), 1, DirectionShip::Horizontal));
+    flotilla.push_back(new Ship(Point(2, 9), 1, DirectionShip::Horizontal));
+    flotilla.push_back(new Ship(Point(6, 2), 1, DirectionShip::Horizontal));
+    flotilla.push_back(new Ship(Point(7, 8), 1, DirectionShip::Horizontal));
+
     return flotilla;
+}
+
+
+
+Point PlayerPlatformConsole::SetShot()
+{
+        
 }

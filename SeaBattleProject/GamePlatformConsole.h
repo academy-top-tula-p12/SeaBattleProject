@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "Platform.h"
 #include "Console.h"
@@ -13,6 +14,10 @@ class GamePlatformConsole : public IGamePlatform
 	int rowMain{ 2 };
 	int columnMain{ 5 };
 	int sizeCell{ 2 };
+
+	std::vector<ShipConsole*> humanFlotilla;
+
+	void SetFlotillaConsole(Player* humanPlayer);
 public:
 	GamePlatformConsole(Console* console);
 

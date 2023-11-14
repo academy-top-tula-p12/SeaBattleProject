@@ -1,5 +1,22 @@
 #include "GamePlatformConsole.h"
 
+void GamePlatformConsole::SetFlotillaConsole(Player* humanPlayer)
+{
+	for (auto ship : humanPlayer->Flotilla())
+	{
+		ShipConsole* shipConsole = new ShipConsole(console, ship->Size());
+		shipConsole->InnerShip() = ship;
+		shipConsole->Direction() = ship->Direction();
+		shipConsole->SetAreaBegin(Point(rowMain, columnMain));
+		shipConsole->AreaBack() = Colors::Green;
+		shipConsole->AreaFore() = Colors::Green;
+		shipConsole->SetSizeCell(sizeCell);
+
+		humanFlotilla.push_back(shipConsole);
+	}
+	
+}
+
 GamePlatformConsole::GamePlatformConsole(Console* console)
 	: console{ console } {}
 
@@ -23,15 +40,28 @@ void GamePlatformConsole::SetupGame(Player* humanPlayer)
 
 void GamePlatformConsole::ViewGame(std::vector<Player*> players)
 {
+	if (!humanFlotilla.size())
+		SetFlotillaConsole(players[0]);
+
 	console->Clear();
 
 	auto builder = FieldConsole::GetBuilder(console);
 	auto fieldHuman = builder.SetPoint(Point(rowMain, columnMain))
-		->SetCellSize(2)
+		->SetCellSize(sizeCell)
 		->GetField();
 	fieldHuman->Title() = players[0]->Name();
-
 	fieldHuman->Show();
+
+	for (auto shipConsole : humanFlotilla)
+		shipConsole->Show();
+
+	builder.Reset();
+	int computerFieldColumn = columnMain + (fieldHuman->SizeField + 4) * sizeCell * 2;
+	auto fieldComputer = builder.SetPoint(Point(rowMain, computerFieldColumn))
+		->SetCellSize(sizeCell)
+		->GetField();
+	fieldComputer->Title() = players[1]->Name();
+	fieldComputer->Show();
 
 	/*auto fieldComputer = new FieldConsole(console);
 	fieldComputer->Title() = players[1]->Name();

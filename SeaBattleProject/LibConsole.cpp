@@ -275,4 +275,109 @@ void ShipConsole::Hide()
     isShow = false;
 }
 
+CursorConsole::CursorConsole(Console* console)
+    : WindowConsole(console)
+{
+    sizeCell = 1;
+    areaBegin = { 1, 1 };
 
+    isBorder = false;
+    areaBack = Colors::Blue;
+    areaFore = Colors::Blue;
+
+    column = areaBegin.column;
+    row = areaBegin.row;
+
+    width = 1;
+    height = 1;
+
+    bufferSave = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
+    bufferShow = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
+}
+
+CursorConsole* CursorConsole::SetSizeCell(int size)
+{
+    sizeCell = size;
+
+    delete[] bufferSave;
+    delete[] bufferShow;
+
+    bufferSave = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
+    bufferShow = new CHAR_INFO[height * width * sizeCell * 2 * sizeCell];
+
+    return this;
+}
+
+CursorConsole* CursorConsole::SetAreaBegin(Point point)
+{
+    areaBegin = point;
+    areaBegin.row += 2;
+    areaBegin.column += 3;
+
+    column = areaBegin.column;
+    row = areaBegin.row;
+
+    return this;
+}
+
+void CursorConsole::Show()
+{
+    if (isShow) return;
+
+    COORD bufferSize;
+    COORD bufferPosition{ 0, 0 };
+    SMALL_RECT rect;
+
+    bufferSize.X = width * sizeCell * 2;
+    bufferSize.Y = height * sizeCell;
+
+    rect.Top = areaBegin.row + row * sizeCell;
+    rect.Left = areaBegin.column + column * 2 * sizeCell;
+    rect.Bottom = (areaBegin.row + row + height) * sizeCell;
+    rect.Right = (areaBegin.column + column + width) * sizeCell * 2;
+
+    bool dSuccess = ReadConsoleOutput(console->Descriptor(),
+        bufferSave,
+        bufferSize,
+        bufferPosition,
+        &rect);
+
+    WORD attributeArea = ((WORD)areaFore + (false ? 8 : 0)) | (((WORD)areaBack + (false ? 8 : 0)) << 4);
+
+    for (int i = 0; i < sizeCell * 2 * sizeCell; i++)
+    {
+        bufferShow[i].Char.UnicodeChar = DESK;
+        bufferShow[i].Attributes = attributeArea;
+    }
+
+    dSuccess = WriteConsoleOutput(console->Descriptor(),
+        bufferShow,
+        bufferSize,
+        bufferPosition,
+        &rect);
+    isShow = true;
+}
+
+void CursorConsole::Hide()
+{
+    if (!isShow) return;
+
+    COORD bufferSize;
+    COORD bufferPosition{ 0, 0 };
+    SMALL_RECT rect;
+
+    bufferSize.X = width * sizeCell * 2;
+    bufferSize.Y = height * sizeCell;
+
+    rect.Top = areaBegin.row + row * sizeCell;
+    rect.Left = areaBegin.column + column * 2 * sizeCell;
+    rect.Bottom = (areaBegin.row + row + height) * sizeCell;
+    rect.Right = (areaBegin.column + column + width) * sizeCell * 2;
+
+    bool dSuccess = WriteConsoleOutput(console->Descriptor(),
+        bufferSave,
+        bufferSize,
+        bufferPosition,
+        &rect);
+    isShow = false;
+}

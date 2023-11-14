@@ -26,6 +26,6 @@ public:
 	PlayerPlatformConsole(Console* console) : console{ console } {}
 
 	std::vector<Ship*> SetFlotilla() override;
-	Point SetShot() override { return Point(); };
+	Point SetShot() override;
 };
 

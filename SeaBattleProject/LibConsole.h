@@ -2,6 +2,11 @@
 #include "Console.h"
 #include "Platform.h"
 
+#define WATER 0x2592
+#define DESK 0x2588
+#define WATERCHAR 177
+#define DESKCHAR 219
+
 class FieldConsoleBuilder;
 
 /// <summary>
@@ -11,7 +16,6 @@ class FieldConsoleBuilder;
 class FieldConsole : public WindowConsole
 {
 	int sizeCell;
-
 public:
 	friend FieldConsoleBuilder;
 

@@ -22,6 +22,8 @@ class PlayerPlatformConsole : public IPlayerPlatform
 	ShipConsole* SetShip(int size);
 	bool IsSetShip(ShipConsole* ship);
 	void ShowShips();
+
+	Point point{};
 public:
 	PlayerPlatformConsole(Console* console) : console{ console } {}
 

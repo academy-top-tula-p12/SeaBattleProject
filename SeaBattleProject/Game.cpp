@@ -54,9 +54,9 @@ void Game::Process()
 		if (point.row == -1)
 			break;
 
-		platform->GamePlatform()->ViewShot(point, currentPlayer);
-
 		hit = players[!currentPlayer]->CheckShot(point);
+
+		platform->GamePlatform()->ViewShot(point, currentPlayer, hit);
 
 		if (hit == HitType::Destroy)
 		{

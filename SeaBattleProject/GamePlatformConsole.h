@@ -30,6 +30,6 @@ public:
 
 	void SetupGame() override;
 	void ViewGame() override;
-	void ViewShot(Point point, bool currentPlayer) override;
+	void ViewShot(Point point, bool currentPlayer, HitType hit) override;
 };
 

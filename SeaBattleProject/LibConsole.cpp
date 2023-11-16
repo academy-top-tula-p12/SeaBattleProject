@@ -1,8 +1,5 @@
 #include "LibConsole.h"
 
-int WATER = 0x2592;
-int DESK = 0x2588;
-
 FieldConsole::FieldConsole(Console* console)
     : WindowConsole(console)
 {

@@ -85,4 +85,5 @@ void ComputerPlayer::SetFlotilla()
 	flotilla.push_back(new Ship(Point(6, 2), 1, DirectionShip::Horizontal));
 	flotilla.push_back(new Ship(Point(7, 8), 1, DirectionShip::Horizontal));
 
+	battleField.SetShips(flotilla);
 }

@@ -24,7 +24,7 @@ class IGamePlatform
 public:
 	virtual void SetupGame() = 0;
 	virtual void ViewGame() = 0;
-	virtual void ViewShot(Point point, bool currentPlayer) = 0;
+	virtual void ViewShot(Point point, bool currentPlayer, HitType hit) = 0;
 
 	virtual std::vector<Player*>& Players() = 0;
 	//virtual void SetDestroy() = 0

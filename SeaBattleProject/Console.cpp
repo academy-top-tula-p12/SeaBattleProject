@@ -95,6 +95,35 @@ void Console::Rectangle(int row, int column, int height, int width, char pattern
 			WriteGoto(row + r, column + c, pattern);
 }
 
+void Console::Rect(int row, int column, int height, int width, int pattern)
+{
+	CHAR_INFO* bufferRect = new CHAR_INFO[height * width];
+
+	COORD bufferSize{ width, height };
+	COORD bufferPosition{ 0, 0 };
+	SMALL_RECT rect{ column, row, column + width, row + height };
+
+	GetConsoleScreenBufferInfo(descriptor, &info);
+	byte colorFore = info.wAttributes & 0b1111;
+	byte colorBack = info.wAttributes & (0b1111 << 4);
+
+	WORD attributeArea = ((WORD)colorFore + (false ? 8 : 0)) | (((WORD)colorBack + (false ? 8 : 0)) << 4);
+
+	int fieldArea = height * width;
+
+	for (int i = 0; i < fieldArea; i++)
+	{
+		bufferRect[i].Char.UnicodeChar = pattern;
+		bufferRect[i].Attributes = attributeArea;
+	}
+
+	bool dSuccess = WriteConsoleOutput(descriptor,
+		bufferRect,
+		bufferSize,
+		bufferPosition,
+		&rect);
+}
+
 void Console::BorderSimple(int row, int column, int height, int width)
 {
 	width--;

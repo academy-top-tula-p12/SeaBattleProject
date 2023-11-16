@@ -324,11 +324,14 @@ std::vector<Ship*> PlayerPlatformConsole::SetFlotilla()
 
 Point PlayerPlatformConsole::SetShot()
 {
-    Point point{};
+    //Point point{};
 
     CursorConsole* cursor = (new CursorConsole(console))
         ->SetSizeCell(sizeCell)
         ->SetAreaBegin(Point(rowMain, columnMain + (14 * 2 * sizeCell)));
+    
+    //cursor->Row() = point.row;
+    //cursor->Column() = point.column;
 
     cursor->Show();
 

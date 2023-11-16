@@ -1,5 +1,6 @@
 #include "GamePlatformConsole.h"
 
+
 void GamePlatformConsole::SetFlotillaConsole()
 {
 	for (auto ship : players[0]->Flotilla())
@@ -74,9 +75,81 @@ void GamePlatformConsole::ViewGame()
 	fieldComputer->Show();
 }
 
-void GamePlatformConsole::ViewShot(Point point, bool currentPlayer)
+void GamePlatformConsole::ViewShot(Point point, bool currentPlayer, HitType hit)
 {
-	FieldConsole* field = (currentPlayer) ? fieldComputer : fieldHuman;
+	FieldConsole* fieldConsole = (currentPlayer) ? fieldHuman : fieldComputer;
+	Field* field = &players[!currentPlayer]->BattleField();
 
-	//char fill = ()
+	CellType type = field->GetCell(point).Type();
+	char symbolFill = (type == CellType::Water) ? WATERCHAR : DESKCHAR;
+	
+	int row{ fieldConsole->Row() + fieldConsole->AreaBegin.row + 1 + point.row * sizeCell };
+	int column{ fieldConsole->Column() + fieldConsole->AreaBegin.column + 1 + point.column * 2 * sizeCell };
+
+	int width = sizeCell * 2;
+	int heigth = sizeCell;
+
+	console->Foreground(Colors::Red);
+	if(hit == HitType::Wound)
+		console->Foreground(Colors::Magenta);
+	
+	console->Rectangle(row, column, heigth, width, symbolFill);
+
+	if (hit == HitType::Destroy)
+	{
+		Ship* shipDestroy{};
+		for (auto ship : players[!currentPlayer]->Flotilla())
+			if (ship->IsPoint(point))
+				shipDestroy = ship;
+
+		int rw = shipDestroy->Row();
+		int cw = shipDestroy->Column();
+
+		int hw = (shipDestroy->Direction() == DirectionShip::Horizontal) ? 1 : shipDestroy->Size();
+		int ww = (shipDestroy->Direction() == DirectionShip::Vertical) ? 1 : shipDestroy->Size();
+
+		if (rw > 0)
+		{
+			rw--;
+			hw++;
+		}
+
+		if (cw > 0)
+		{
+			cw--;
+			ww++;
+		}
+			
+		if (rw + hw < 10) hw++;
+		if (cw + ww < 10) ww++;
+
+		rw = fieldConsole->Row() + fieldConsole->AreaBegin.row + 1 + rw * sizeCell;
+		cw = fieldConsole->Column() + fieldConsole->AreaBegin.column + 1 + cw * 2 * sizeCell;
+		hw = hw * sizeCell;
+		ww = ww * 2 * sizeCell;
+
+		console->Background(Colors::Blue);
+		console->Foreground(Colors::Red);
+		console->Rectangle(rw, cw, hw, ww, WATERCHAR);
+
+		int r = fieldConsole->Row() + fieldConsole->AreaBegin.row + 1 + shipDestroy->Row() * sizeCell;
+		int c = fieldConsole->Column() + fieldConsole->AreaBegin.column + 1 + shipDestroy->Column() * 2 * sizeCell;
+
+		int w{};
+		int h{};
+
+		if (shipDestroy->Direction() == DirectionShip::Horizontal)
+		{
+			h = sizeCell;
+			w = shipDestroy->Size() * 2 * sizeCell;
+		}
+		else
+		{
+			h = shipDestroy->Size() * sizeCell;
+			w = 2 * sizeCell;
+		}
+
+		//console->Foreground(Colors::Red);
+		console->Rectangle(r, c, h, w, DESKCHAR);
+	}
 }

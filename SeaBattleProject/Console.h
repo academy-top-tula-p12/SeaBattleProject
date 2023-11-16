@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <Windows.h>
 
+#define SPACE 0x0020
+
 enum KeyCode : int
 {
 	ArrowUp = 72,
@@ -132,6 +134,7 @@ public:
 	void Background(Colors color, bool brightness = false);
 	
 	void Rectangle(int row, int column, int height, int width, char pattern = 32);
+	void Rect(int row, int column, int height, int width, int pattern = SPACE);
 	void BorderSimple(int row, int column, int height, int width);
 	void BorderDouble(int row, int column, int height, int width);
 };
